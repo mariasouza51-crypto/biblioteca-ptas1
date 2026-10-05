@@ -38,6 +38,20 @@ app.post('/livros', (req, res) => {
     res.status(201).json(novoLivro);
 });
 
+app.put('/livros/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const livro = livros.find(livro => livro.id === id);
+
+    if (livro){
+        livro.titulo = req.body.titulo;
+        res.json(livro);
+    } else {
+        res.status(404).json({
+            erro: 'livro não encontrado'
+        });
+    }
+});
 
 app.listen(PORTA, () => {
     console.log('Servidor rodando em http://localhost:3000');
