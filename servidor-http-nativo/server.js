@@ -138,6 +138,41 @@ app.post('/emprestimos', (req, res) => {
     res.status(201).json(novoEmprestimo);
 });
 
+app.post('/emprestimos/:id/devolver', (req, res) => {
+    const id = Number(req.params.id);
+
+    const emprestimo = emprestimos.find(e => e.id === id);
+
+    if (!emprestimo) {
+        return res.status(404).json({ erro: 'Empréstimo não encontrado' });
+    }
+
+    if (emprestimo.dataDevolucaoReal) {
+        return res.status(400).json({ erro: 'Livro já devolvido' });
+    }
+
+    emprestimo.dataDevolucaoReal = new Date();
+
+    const atraso = Math.ceil(
+        (emprestimo.dataDevolucaoReal - emprestimo.dataDevolucaoPrevista) 
+        / (1000 * 60 * 60 * 24)
+    );
+
+    let multa = 0;
+
+    if (atraso > 0) {
+        multa = atraso * 2;
+
+        const leitor = leitores.find(l => l.id === emprestimo.leitorId);
+        leitor.bloqueado = true;
+    }
+
+    res.json({
+        mensagem: 'Devolução realizada',
+        multa
+    });
+});
+
 app.listen(PORTA, () => {
     console.log('Servidor rodando em http://localhost:3000');
 });
