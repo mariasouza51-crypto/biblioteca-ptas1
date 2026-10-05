@@ -1,6 +1,7 @@
-const express = require('express');
+const express = require("express");
 
 const app = express();
+app.use(express.json());
 
 const PORTA = 3000;
 
@@ -26,6 +27,17 @@ app.get('/livros/:id', (req, res) => {
         });
     }
 });
+
+app.post('/livros', (req, res) => {
+    const novoLivro = {
+        id: livros.length + 1,
+        titulo: req.body.titulo
+    };
+
+    livros.push(novoLivro);
+    res.status(201).json(novoLivro);
+});
+
 
 app.listen(PORTA, () => {
     console.log('Servidor rodando em http://localhost:3000');
