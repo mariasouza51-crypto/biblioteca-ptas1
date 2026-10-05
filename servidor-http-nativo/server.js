@@ -1,31 +1,32 @@
-const http = require ('node:http');
+const express = require('express');
+
+const app = express();
+
 const PORTA = 3000;
 
-const server = http.createServer((req, res) => {
-    console.log(`requisicao recebida: ${req.method} ${req.url}`)
+const livros = [
+    { id: 1, titulo: 'Dom Casmurro' },
+    { id: 2, titulo: 'O Cortiço' }
+];
 
-    res.statusCode = 200;
-    res.setHeader('content-type', 'text/plain; charset=utf-8')
-   
- 
+app.get('/livros', (req, res) => {
+    res.json(livros);
+});
 
-if (req.url === '/livros' && req.method === 'GET'){
-    const livros = [
-        {id: 1, titulo: 'Dom Casmurro'},
-        {id: 2, titulo: 'O Cortiço'}
-    ];
-    
-    res.statusCode = 200;
-    res.end(JSON.stringify(livros));
-}
+app.get('/livros/:id', (req, res) => {
+    const id = Number(req.params.id);
 
-else{
-    res.statusCode = 404;
-      res.end(JSON.stringify({
-        erro: 'Rota não encontrada'
-      }));
-}});
-server.listen(PORTA, () => {
+    const livro = livros.find(livro => livro.id === id);
+
+    if (livro) {
+        res.json(livro);
+    } else {
+        res.status(404).json({
+            erro: 'Livro não encontrado'
+        });
+    }
+});
+
+app.listen(PORTA, () => {
     console.log('Servidor rodando em http://localhost:3000');
-})
- 
+});
