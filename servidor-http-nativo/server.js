@@ -17,6 +17,9 @@ const leitores = [
 
 let proximoLeitorId = 3;
 
+const emprestimos = [];
+let proximoEmprestimoId = 1;
+
 app.get('/livros', (req, res) => {
     res.json(livros);
 });
@@ -95,6 +98,44 @@ app.post('/leitores', (req, res) => {
 
     leitores.push(novoLeitor);
     res.status(201).json(novoLeitor);
+});
+
+app.post('/emprestimos', (req, res) => {
+    const { leitorId, livroId } = req.body;
+
+    const leitor = leitores.find(l => l.id === leitorId);
+    const livro = livros.find(l => l.id === livroId);
+
+    if (!leitor || !livro) {
+        return res.status(404).json({ erro: 'Leitor ou livro não encontrado' });
+    }
+
+    if (leitor.bloqueado) {
+        return res.status(400).json({ erro: 'Leitor bloqueado' });
+    }
+
+    const ativos = emprestimos.filter(e =>
+        e.leitorId === leitorId && !e.dataDevolucaoReal
+    );
+
+    if (ativos.length >= 3) {
+        return res.status(400).json({
+            erro: 'Limite de 3 empréstimos atingido'
+        });
+    }
+
+    const novoEmprestimo = {
+        id: proximoEmprestimoId++,
+        leitorId,
+        livroId,
+        dataEmprestimo: new Date(),
+        dataDevolucaoPrevista: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        dataDevolucaoReal: null
+    };
+
+    emprestimos.push(novoEmprestimo);
+
+    res.status(201).json(novoEmprestimo);
 });
 
 app.listen(PORTA, () => {
