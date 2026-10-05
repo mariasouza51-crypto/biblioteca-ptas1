@@ -10,6 +10,13 @@ const livros = [
     { id: 2, titulo: 'O Cortiço' }
 ];
 
+const leitores = [
+    { id: 1, nome: "João", bloqueado: false },
+    { id: 2, nome: "Maria", bloqueado: false }
+];
+
+let proximoLeitorId = 3;
+
 app.get('/livros', (req, res) => {
     res.json(livros);
 });
@@ -51,6 +58,43 @@ app.put('/livros/:id', (req, res) => {
             erro: 'livro não encontrado'
         });
     }
+});
+
+app.delete('/livros/:id', (req, res) => {
+    const id = Number(req.params.id);
+
+    const indice = livros.findIndex(livro => livro.id ===id);
+
+    if (indice !== -1) {
+        livros.splice(indice, 1)
+
+        res.json({
+            mensagem: 'Livro excluido com sucesso'
+        })
+    } else{
+        res.status(404).json({
+            erro: 'Livro não encontrado'
+        })
+    }
+});
+
+app.get('/leitores', (req, res) => {
+    res.json(leitores);
+});
+
+app.post('/leitores', (req, res) => {
+    if (!req.body.nome) {
+        return res.status(400).json({ erro: 'Nome é obrigatório' });
+    }
+
+    const novoLeitor = {
+        id: proximoLeitorId++,
+        nome: req.body.nome,
+        bloqueado: false
+    };
+
+    leitores.push(novoLeitor);
+    res.status(201).json(novoLeitor);
 });
 
 app.listen(PORTA, () => {
