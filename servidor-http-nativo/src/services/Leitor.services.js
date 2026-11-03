@@ -2,5 +2,9 @@ const leitor = []
 let proximoId = 0
 
 export function listar(){
-    return emprestimos
+    return leitor
+}
+
+export function cadastrar(){
+    return leitor
 }

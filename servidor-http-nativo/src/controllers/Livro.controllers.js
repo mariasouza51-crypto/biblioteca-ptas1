@@ -7,3 +7,15 @@ export function listar(req, res) {
 export function cadastrar(req, res) {
     res.json(service.cadastrar())
 }
+
+export function adicionar (req, res) {
+    res.json(service.adicionar())
+}
+
+export function deletar (req, res) {
+    res.json(service.deletar())
+}
+
+export function buscarId(req, res) {
+    res.json(service.buscarId(req.params.id))
+}
