@@ -1,7 +1,33 @@
 {
+  "name": "biblioteca-ptas1",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/mariasouza51-crypto/biblioteca-ptas1#readme",
+  "bugs": {
+    "url": "https://github.com/mariasouza51-crypto/biblioteca-ptas1/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mariasouza51-crypto/biblioteca-ptas1.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+     "test": "echo \"Error: no test specified\" && exit 1",
+    "db:up": "docker start mongo-tarefas || docker run -d --name mongo-tarefas -p 127.0.0.1:27017:27017 -v mongo-tarefas-data:/data/db mongo:8",
+    "db:down": "docker stop mongo-tarefas",
+    "db:logs": "docker logs -f mongo-tarefas",
+    "db:reset": "docker rm -f mongo-tarefas; docker volume rm mongo-tarefas-data",
+    "predev": "npm run db:up",
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js"
+  },
   "dependencies": {
     "dotenv": "^18.0.10",
     "express": "^5.2.1",
     "mongodb": "^7.8.0"
-  }
+  },
+  "devDependencies": {}
 }
