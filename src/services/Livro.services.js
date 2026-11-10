@@ -13,10 +13,6 @@ export function cadastrar(){
     return Livro
 }
 
-export function adicionar(){
-    return Livro
-}
-
 export function deletar(){
     return Livro
 }

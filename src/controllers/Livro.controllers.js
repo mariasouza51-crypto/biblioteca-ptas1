@@ -8,10 +8,6 @@ export function cadastrar(req, res) {
     res.json(service.cadastrar())
 }
 
-export function adicionar (req, res) {
-    res.json(service.adicionar())
-}
-
 export function deletar (req, res) {
     res.json(service.deletar())
 }
