@@ -12,6 +12,6 @@ export function deletar (req, res) {
     res.json(service.deletar())
 }
 
-export function buscarId(req, res) {
-    res.json(service.buscarId(req.params.id))
+export function buscarId(req, res, id) {
+    res.json(service.buscarId(id))
 }
